@@ -24,12 +24,14 @@ public class Simulacija implements Meni
 {
 
 	private ArrayList<Akademija> akademije;
+
 	// konstruktor za pokretanje programa
 	private Simulacija()
 	{
 		akademije = new ArrayList<>();
 		load();
 	}
+
 	// pokretanje simulacija
 	public static void main(String[] args)
 	{
@@ -37,6 +39,7 @@ public class Simulacija implements Meni
 		new Simulacija().opcije();
 		in.close();
 	}
+
 	// serijalizacija svih akademija
 	private void sacuvaj()
 	{
@@ -56,6 +59,7 @@ public class Simulacija implements Meni
 		}
 
 	}
+
 	// ucitavanje podataka iz fajla
 	@SuppressWarnings("unchecked")
 	private ArrayList<Akademija> load()
@@ -65,7 +69,7 @@ public class Simulacija implements Meni
 		{
 			isEmpty = false;
 			FileInputStream fis = new FileInputStream(
-					new File("C:\\Users\\bojan.miodragovic\\eclipse-workspace\\ProjekatAkademija4.0\\akademije.ser"));
+					new File("akademije.ser"));
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
 			if (fis != null)
@@ -94,6 +98,7 @@ public class Simulacija implements Meni
 		}
 
 	}
+
 	// poziv menija iz interfejsa
 	@Override
 	public void opcije()
@@ -148,6 +153,7 @@ public class Simulacija implements Meni
 				break;
 		}
 	}
+
 	// dodavanje nove akademije u listu akademija
 	public void dodajAkademiju()
 	{
@@ -197,28 +203,37 @@ public class Simulacija implements Meni
 			System.out.println("Pogresan unos. Moguce je unijeti 1, 2 ili 3.");
 		}
 	}
+
 	// modifikacija akademija koje su unutar liste
 	public void modifikujAkademiju()
 	{
-		System.out.println("Lista akademija: ");
-		try
+
+		if (akademije.isEmpty())
 		{
-			Printer.ispisListe(akademije);
-		} catch (PraznaListaException e)
+			System.out.println("Lista akademija je prazna. Unesite prvo akademije.");
+		} else
 		{
-			System.out.println(e.getMessage());
-		}
-		System.out.println("Unesite redni broj akademije koju zelite da modifikujete: ");
-		while (true)
-		{
-			int retVal = UnosInt.unos();
-			if (retVal > akademije.size() || retVal < 1)
+
+			System.out.println("Lista akademija: ");
+			try
 			{
-				System.out.println("Pogresan unos.");
-			} else
+				Printer.ispisListe(akademije);
+			} catch (PraznaListaException e)
 			{
-				akademije.get(retVal - 1).opcije();
-				break;
+				System.out.println(e.getMessage());
+			}
+			System.out.println("Unesite redni broj akademije koju zelite da modifikujete: ");
+			while (true)
+			{
+				int retVal = UnosInt.unos();
+				if (retVal > akademije.size() || retVal < 1)
+				{
+					System.out.println("Pogresan unos.");
+				} else
+				{
+					akademije.get(retVal - 1).opcije();
+					break;
+				}
 			}
 		}
 	}

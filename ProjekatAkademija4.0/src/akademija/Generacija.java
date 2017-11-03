@@ -19,9 +19,8 @@ import osoba.Zaposleni;
 public class Generacija implements Meni, Serializable
 {
 
-	
 	private static final long serialVersionUID = 1L;
-	//deklaracija varijabli
+	// deklaracija varijabli
 	private String godinaOd, godinaDo;
 	// preuzete liste iz akademije
 	private ArrayList<Zaposleni> zaposleniAkademija;
@@ -41,10 +40,15 @@ public class Generacija implements Meni, Serializable
 			throw new PraznaListaException();
 		}
 		// unos pocetka i kraja date generacije
-		System.out.println("Unesite datum pocetka generacije: ");
+		boolean unos = false;
+		while(!unos) {
+		System.out.println("Unesite datum pocetka generacije (dd.mm.gggg): ");
 		this.godinaOd = UnosString.unos();
+		unos = provjeraUnosa(godinaOd);
 		System.out.println("Unesite datum kraja generacije: ");
 		this.godinaDo = UnosString.unos();
+		unos = provjeraUnosa(godinaDo);
+		}
 		// preuzimanje listi iz akademije
 		this.zaposleniAkademija = zaposleniAkademija;
 		this.polazniciAkademija = polazniciAkademija;
@@ -53,6 +57,35 @@ public class Generacija implements Meni, Serializable
 		zaposleniGeneracija = new ArrayList<>();
 		polazniciGeneracija = new ArrayList<>();
 		kurseviGeneracija = new ArrayList<>();
+	}
+
+	private boolean provjeraUnosa(String str)
+	{
+		int godina = 0;
+		try
+		{
+			godina = Integer.parseInt(str.substring(6, 10));
+		} catch (NumberFormatException | IndexOutOfBoundsException e  )
+		{
+			System.out.println("Pogresan unos. Unesite ponovo: ");
+			return false;
+		} 
+	
+		if (2016 > godina || Character.isDigit(str.charAt(0))
+				|| Character.isDigit(str.charAt(1)) || str.charAt(2) == '.' || Character.isDigit(str.charAt(3))
+				|| Character.isDigit(str.charAt(4)) || str.charAt(5) == '.' || Character.isDigit(str.charAt(6))
+				|| Character.isDigit(str.charAt(7)) || Character.isDigit(str.charAt(8))
+				|| Character.isDigit(str.charAt(9)))
+		{
+			return true;
+			
+		} else {
+			System.out.println("Pogresan unos. Unesite ponovo: ");
+			return false;
+		}
+		
+		
+
 	}
 
 	// meni generacije koji se poziva unutar akademije
@@ -72,6 +105,8 @@ public class Generacija implements Meni, Serializable
 			System.out.println("[7] Prikazi kurseve");
 			System.out.println("[8] Prikazi zaposlene");
 			System.out.println("[9] Prikazi polaznike");
+			System.out.println("[10] Izmjeni datum pocetka generacije");
+			System.out.println("[11] Izmjeni datum kraja generacije");
 			System.out.println("[0] Nazad");
 			int odgovor = UnosInt.unos();
 			switch (odgovor) {
@@ -117,6 +152,27 @@ public class Generacija implements Meni, Serializable
 			case 9:
 				System.out.println("*****************ISPIS POLAZNIKA******************");
 				printPolaznik();
+				break;
+			case 10:
+				System.out.println("*****************IZMJENA DATUMA POCETKA******************");
+				System.out.println(godinaOd);
+				boolean unos = false;
+				while(!unos) {
+				System.out.println("Unesite datum pocetka generacije: ");
+				this.godinaOd = UnosString.unos();
+				unos = provjeraUnosa(godinaOd);
+				}
+				
+				setGodinaOd(godinaOd);
+				break;
+			case 11:
+				System.out.println("*****************IZMJENA DATUMA KRAJA******************");
+				unos = false;
+				while(!unos) {
+				System.out.println("Unesite datum kraja generacije: ");
+				this.godinaDo = UnosString.unos();
+				unos = provjeraUnosa(godinaDo);
+				}
 				break;
 			default:
 				System.out.println("Pogresan unos.");
@@ -164,7 +220,8 @@ public class Generacija implements Meni, Serializable
 		}
 
 	}
-	//dodavanje novih polaznika u generaciju iz akademije
+
+	// dodavanje novih polaznika u generaciju iz akademije
 	private void dodajPolaznika() throws DuplikatException
 	{
 		if (polazniciAkademija.isEmpty())
@@ -234,6 +291,7 @@ public class Generacija implements Meni, Serializable
 		}
 
 	}
+
 	// dodavanje zaposlenih u generaciju iz akademije
 	private void dodajZaposlenog()
 	{
@@ -309,6 +367,7 @@ public class Generacija implements Meni, Serializable
 		}
 
 	}
+
 	// dodavanje kurseva u generaciju kreiranjem novog objekta KursUGeneraciji
 	private void dodajKurs() throws DuplikatException
 	{

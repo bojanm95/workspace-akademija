@@ -1,5 +1,6 @@
 package main;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import exception.PraznaListaException;
@@ -11,8 +12,10 @@ import osoba.Mentor;
 import osoba.Polaznik;
 import osoba.Zaposleni;
 
-public class KursUGeneraciji implements Meni
+public class KursUGeneraciji implements Meni, Serializable
 {
+	
+	private static final long serialVersionUID = 1L;
 	// preuzeti kurs
 	private Kurs kurs;
 	// preuzete osobe
